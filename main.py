@@ -2,10 +2,6 @@ from classes import *
 from settings import *
 from random import randint
 
-pygame.init()
-size = WIDTH, HEIGHT
-screen = pygame.display.set_mode(size)
-clock = pygame.time.Clock()
 pygame.display.set_caption('Roguelike Like')
 
 all_sprites = pygame.sprite.Group()
@@ -20,12 +16,15 @@ for i in range(13):
         tile.rect = tile.image.get_rect()
         tile.rect.topleft = (i * 64, j * 64)
 
-hero = Entity('elf', 'm', all_sprites, hero_sprites)
-enemy = Entity('demons', 'mimic', all_sprites, enemies_sprites)
+enemy = Enemy('undeads', 'big_zombie', all_sprites, enemies_sprites)
 enemy.rect.midbottom = (736, 544)
 enemy.right_faced = False
 
+HERO = Hero('elf', 'm', all_sprites, hero_sprites)
+
 running = True
+
+frame_counter = 1
 
 while running:
     for event in pygame.event.get():
@@ -34,28 +33,28 @@ while running:
 
     key = pygame.key.get_pressed()
     if key[pygame.K_UP] or key[pygame.K_w]:
-        hero.anim_type = RUN
-        hero.rect.top -= hero.speed
+        HERO.anim_type = RUN
+        HERO.rect.top -= HERO.speed
     if key[pygame.K_DOWN] or key[pygame.K_s]:
-        hero.anim_type = RUN
-        hero.rect.top += hero.speed
+        HERO.anim_type = RUN
+        HERO.rect.top += HERO.speed
     if key[pygame.K_LEFT] or key[pygame.K_a]:
-        hero.right_faced = False
-        hero.anim_type = RUN
-        hero.rect.right -= hero.speed
+        HERO.right_faced = False
+        HERO.anim_type = RUN
+        HERO.rect.right -= HERO.speed
     if key[pygame.K_RIGHT] or key[pygame.K_d]:
-        hero.right_faced = True
-        hero.anim_type = RUN
-        hero.rect.right += hero.speed
+        HERO.right_faced = True
+        HERO.anim_type = RUN
+        HERO.rect.right += HERO.speed
     if not ((key[pygame.K_UP] or key[pygame.K_w]) or (key[pygame.K_DOWN] or key[pygame.K_s]) or
             (key[pygame.K_LEFT] or key[pygame.K_a]) or (key[pygame.K_RIGHT] or key[pygame.K_d])):
-        hero.anim_type = IDLE
+        HERO.anim_type = IDLE
 
-    screen.fill((0, 0, 0))
+    SCREEN.fill((0, 0, 0))
 
-    all_sprites.draw(screen)
-    all_sprites.update(enemies_sprites, hero_sprites)
+    all_sprites.draw(SCREEN)
+    all_sprites.update(enemies_sprites, HERO)
 
     pygame.display.flip()
-    clock.tick(10)
+    CLOCK.tick(FPS)
 pygame.quit()

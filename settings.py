@@ -36,15 +36,19 @@ WIDTH, HEIGHT = 800, 600
 IDLE = 0
 RUN = 1
 HIT = 2
+
+SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
+
+CLOCK = pygame.time.Clock()
+FPS = 10
 # ---------------
 
-debug_display = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # dicts and lists
 # ---------------
 HEROES_RACES = ['elf', 'knight', 'lizard', 'wizzard']
 
-ENTITY_ANIM_DICT = {
+ENTITY_PARAMS_DICT = {
     # heroes
     'elf':
         {'m': {'hit_anim': load_image('heroes\\elf\\m\\hit_anim\\f0.png'),
@@ -111,92 +115,146 @@ ENTITY_ANIM_DICT = {
              {'idle_anim': [load_image(f'enemies\\demons\\big_demon\\idle_anim\\f{i}.png')
                             for i in range(4)],
               'run_anim': [load_image(f'enemies\\demons\\big_demon\\run_anim\\f{i}.png')
-                           for i in range(4)]},
+                           for i in range(4)],
+              'speed': 6,
+              'hp': 3,
+              'dmg': 2},
          'chort':
              {'idle_anim': [load_image(f'enemies\\demons\\chort\\idle_anim\\f{i}.png')
                             for i in range(4)],
               'run_anim': [load_image(f'enemies\\demons\\chort\\run_anim\\f{i}.png')
-                           for i in range(4)]},
+                           for i in range(4)],
+              'speed': 7,
+              'hp': 2,
+              'dmg': 1},
          'imp':
              {'idle_anim': [load_image(f'enemies\\demons\\imp\\idle_anim\\f{i}.png')
                             for i in range(4)],
               'run_anim': [load_image(f'enemies\\demons\\imp\\run_anim\\f{i}.png')
-                           for i in range(4)]},
+                           for i in range(4)],
+              'speed': 8,
+              'hp': 1,
+              'dmg': 1},
          'mimic':
              {'open_anim': [load_image(f'enemies\\demons\\mimic\\f{i}.png')
-                            for i in range(3)]},
+                            for i in range(3)],
+              'speed': 0,
+              'hp': 1,
+              'dmg': 1},
          'necromancer':
              {'idle_anim': [load_image(f'enemies\\demons\\necromancer\\idle_anim\\f{i}.png')
                             for i in range(4)],
               'run_anim': [load_image(f'enemies\\demons\\necromancer\\run_anim\\f{i}.png')
-                           for i in range(4)]},
+                           for i in range(4)],
+              'speed': 6,
+              'hp': 2,
+              'dmg': 2},
          'wogol':
              {'idle_anim': [load_image(f'enemies\\demons\\wogol\\idle_anim\\f{i}.png')
                             for i in range(4)],
               'run_anim': [load_image(f'enemies\\demons\\wogol\\run_anim\\f{i}.png')
-                           for i in range(4)]}},
+                           for i in range(4)],
+              'speed': 9,
+              'hp': 1,
+              'dmg': 1}},
     'orcs':
         {'goblin':
              {'idle_anim': [load_image(f'enemies\\orcs\\goblin\\idle_anim\\f{i}.png')
                             for i in range(4)],
               'run_anim': [load_image(f'enemies\\orcs\\goblin\\run_anim\\f{i}.png')
-                           for i in range(4)]},
+                           for i in range(4)],
+              'speed': 9,
+              'hp': 1,
+              'dmg': 1},
          'masked_orc':
              {'idle_anim': [load_image(f'enemies\\orcs\\masked_orc\\idle_anim\\f{i}.png')
                             for i in range(4)],
               'run_anim': [load_image(f'enemies\\orcs\\masked_orc\\run_anim\\f{i}.png')
-                           for i in range(4)]},
+                           for i in range(4)],
+              'speed': 7,
+              'hp': 1,
+              'dmg': 1},
          'ogre':
              {'idle_anim': [load_image(f'enemies\\orcs\\ogre\\idle_anim\\f{i}.png')
                             for i in range(4)],
               'run_anim': [load_image(f'enemies\\orcs\\ogre\\run_anim\\f{i}.png')
-                           for i in range(4)]},
+                           for i in range(4)],
+              'speed': 5,
+              'hp': 3,
+              'dmg': 2},
          'orc_shaman':
              {'idle_anim': [load_image(f'enemies\\orcs\\orc_shaman\\idle_anim\\f{i}.png')
                             for i in range(4)],
               'run_anim': [load_image(f'enemies\\orcs\\orc_shaman\\run_anim\\f{i}.png')
-                           for i in range(4)]},
+                           for i in range(4)],
+              'speed': 7,
+              'hp': 1,
+              'dmg': 1},
          'orc_warrior':
              {'idle_anim': [load_image(f'enemies\\orcs\\orc_warrior\\idle_anim\\f{i}.png')
                             for i in range(4)],
               'run_anim': [load_image(f'enemies\\orcs\\orc_warrior\\run_anim\\f{i}.png')
-                           for i in range(4)]},
+                           for i in range(4)],
+              'speed': 7,
+              'hp': 2,
+              'dmg': 2},
          'swampy':
              {'idle_anim': [load_image(f'enemies\\orcs\\swampy\\idle_anim\\f{i}.png')
                             for i in range(4)],
               'run_anim': [load_image(f'enemies\\orcs\\swampy\\run_anim\\f{i}.png')
-                           for i in range(4)]}},
+                           for i in range(4)],
+              'speed': 9,
+              'hp': 1,
+              'dmg': 1}},
     'undeads':
         {'big_zombie':
              {'idle_anim': [load_image(f'enemies\\undeads\\big_zombie\\idle_anim\\f{i}.png')
                             for i in range(4)],
               'run_anim': [load_image(f'enemies\\undeads\\big_zombie\\run_anim\\f{i}.png')
-                           for i in range(4)]},
+                           for i in range(4)],
+              'speed': 4,
+              'hp': 4,
+              'dmg': 2},
          'ice_zombie':
              {'idle_anim': [load_image(f'enemies\\undeads\\ice_zombie\\idle_anim\\f{i}.png')
                             for i in range(4)],
               'run_anim': [load_image(f'enemies\\undeads\\ice_zombie\\run_anim\\f{i}.png')
-                           for i in range(4)]},
+                           for i in range(4)],
+              'speed': 9,
+              'hp': 1,
+              'dmg': 1},
          'muddy':
              {'idle_anim': [load_image(f'enemies\\undeads\\muddy\\idle_anim\\f{i}.png')
                             for i in range(4)],
               'run_anim': [load_image(f'enemies\\undeads\\muddy\\run_anim\\f{i}.png')
-                           for i in range(4)]},
+                           for i in range(4)],
+              'speed': 9,
+              'hp': 1,
+              'dmg': 1},
          'skelet':
              {'idle_anim': [load_image(f'enemies\\undeads\\skelet\\idle_anim\\f{i}.png')
                             for i in range(4)],
               'run_anim': [load_image(f'enemies\\undeads\\skelet\\run_anim\\f{i}.png')
-                           for i in range(4)]},
+                           for i in range(4)],
+              'speed': 7,
+              'hp': 1,
+              'dmg': 1},
          'tiny_zombie':
              {'idle_anim': [load_image(f'enemies\\undeads\\tiny_zombie\\idle_anim\\f{i}.png')
                             for i in range(4)],
               'run_anim': [load_image(f'enemies\\undeads\\tiny_zombie\\run_anim\\f{i}.png')
-                           for i in range(4)]},
+                           for i in range(4)],
+              'speed': 8,
+              'hp': 1,
+              'dmg': 1},
          'zombie':
              {'idle_anim': [load_image(f'enemies\\undeads\\zombie\\idle_anim\\f{i}.png')
                             for i in range(4)],
               'run_anim': [load_image(f'enemies\\undeads\\zombie\\run_anim\\f{i}.png')
-                           for i in range(4)]}}
+                           for i in range(4)],
+              'speed': 6,
+              'hp': 2,
+              'dmg': 1}}
 }
 
 TILES_LIST = [load_image(f'environment\\tiles\\floor_{i}.png') for i in range(1, 9)]

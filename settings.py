@@ -27,11 +27,22 @@ def load_image(name, colorkey=None):
     return image
 
 
+def load_level(filename):
+    filename = "data/" + filename
+    with open(filename, 'r') as mapFile:
+        level_map = [line.strip() for line in mapFile]
+
+    max_width = max(map(len, level_map))
+
+    return list(map(lambda x: x.ljust(max_width, '.'), level_map))
+
+
 # ---------------
 
 # constants
 # ---------------
 WIDTH, HEIGHT = 800, 600
+TILE_WIDTH, TILE_HEIGHT = 53, 54
 
 IDLE = 0
 RUN = 1
@@ -257,6 +268,10 @@ ENTITY_PARAMS_DICT = {
               'dmg': 1}}
 }
 
-TILES_LIST = [load_image(f'environment\\tiles\\floor_{i}.png') for i in range(1, 9)]
+# TILES_LIST = [load_image(f'environment\\tiles\\floor_{i}.png') for i in range(1, 9)]
 
+TILES_IMAGE = {
+    'wall': load_image('environment\\walls\\wall_mid.png'),
+    'empty': load_image('environment\\tiles\\floor_3.png')
+}
 # ---------------

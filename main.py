@@ -9,12 +9,24 @@ enemies_sprites = pygame.sprite.Group()
 walls_sprites = pygame.sprite.Group()
 hero_sprites = pygame.sprite.Group()
 
-for i in range(13):
-    for j in range(10):
-        tile = pygame.sprite.Sprite(all_sprites)
-        tile.image = TILES_LIST[randint(0, 7)]
-        tile.rect = tile.image.get_rect()
-        tile.rect.topleft = (i * 64, j * 64)
+
+def generate_level(level):
+    new_player, x, y = None, None, None
+    for y in range(len(level)):
+        for x in range(len(level[y])):
+            if level[y][x] == '.':
+                Tile('empty', x, y, all_sprites)
+            elif level[y][x] == '#':
+                Tile('wall', x, y, all_sprites, walls_sprites)
+            elif level[y][x] == '@':
+                Tile('empty', x, y, all_sprites)
+                # new_player = Player(x, y)
+    return new_player, x, y
+
+
+level_map = load_level('maps\\lvl_1.txt')
+player, max_w, max_h = generate_level(load_level('maps\\lvl_1.txt'))
+
 
 enemy = Enemy('undeads', 'big_zombie', all_sprites, enemies_sprites)
 enemy.rect.midbottom = (736, 544)

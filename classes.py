@@ -87,3 +87,11 @@ class Enemy(Entity):
     def update(self, *args):
         super(Enemy, self).update(*args)
         self.move_to_player(args[1])
+
+
+class Tile(pygame.sprite.Sprite):
+    def __init__(self, tile_type, pos_x, pos_y, *group):
+        super().__init__(*group)
+        self.image = TILES_IMAGE[tile_type]
+        self.rect = self.image.get_rect().move(
+            TILE_WIDTH * pos_x, TILE_HEIGHT * pos_y)

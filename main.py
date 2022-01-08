@@ -3,6 +3,7 @@ from settings import *
 from random import randint
 
 pygame.display.set_caption('Roguelike Like')
+pygame.font.init()
 
 all_sprites = pygame.sprite.Group()
 enemies_sprites = pygame.sprite.Group()
@@ -23,6 +24,31 @@ def generate_level(level):
                 # new_player = Player(x, y)
     return new_player, x, y
 
+
+def start_screen():
+    background = pygame.transform.scale(load_image('startscreen_background_image.png'), (WIDTH, HEIGHT))
+    SCREEN.blit(background, (0, 0))
+    font = pygame.font.Font(None, 30)
+    text_start_game = 'Начать игру'
+    start_game = font.render(text_start_game, True, pygame.Color('white'))
+    rect_start_game = start_game.get_rect()
+    rect_start_game.center = SCREEN.get_rect().center
+    SCREEN.blit(start_game, rect_start_game)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    if rect_start_game.collidepoint(event.pos):
+                        return
+        pygame.display.flip()
+        CLOCK.tick(FPS)
+
+
+start_screen()
 
 level_map = load_level('maps\\lvl_1.txt')
 player, max_w, max_h = generate_level(load_level('maps\\lvl_1.txt'))

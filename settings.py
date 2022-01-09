@@ -37,18 +37,47 @@ def load_level(filename):
     return list(map(lambda x: x.ljust(max_width, '.'), level_map))
 
 
+def start_screen():
+    background = pygame.transform.scale(load_image('startscreen_background_image.png'), (WIDTH, HEIGHT))
+    SCREEN.blit(background, (0, 0))
+    font = pygame.font.Font(None, 30)
+    text_start_game = 'Начать игру'
+    start_game = font.render(text_start_game, True, pygame.Color('white'))
+    rect_start_game = start_game.get_rect()
+    rect_start_game.center = SCREEN.get_rect().center
+    SCREEN.blit(start_game, rect_start_game)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    if rect_start_game.collidepoint(event.pos):
+                        return
+        pygame.display.flip()
+        CLOCK.tick(FPS)
+
+
 # ---------------
 
 # constants
 # ---------------
 WIDTH, HEIGHT = 800, 600
-TILE_WIDTH, TILE_HEIGHT = 53, 54
+TILE_WIDTH, TILE_HEIGHT = 64, 64  # 53, 54
 
 IDLE = 0
 RUN = 1
-HIT = 2
+# HIT = 2
+DMGD = 3
 
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
+
+ALL_SPRITES = pygame.sprite.LayeredUpdates()
+ENEMIES_SPRITES = pygame.sprite.Group()
+WALLS_SPRITES = pygame.sprite.Group()
+HERO_SPRITES = pygame.sprite.Group()
 
 CLOCK = pygame.time.Clock()
 FPS = 10
@@ -62,60 +91,52 @@ HEROES_RACES = ['elf', 'knight', 'lizard', 'wizzard']
 ENTITY_PARAMS_DICT = {
     # heroes
     'elf':
-        {'m': {'hit_anim': load_image('heroes\\elf\\m\\hit_anim\\f0.png'),
-               'run_anim': [
+        {'m': {'run_anim': [
                    load_image(f'heroes\\elf\\m\\run_anim\\f{i}.png')
                    for i in range(4)],
                'idle_anim': [
                    load_image(f'heroes\\elf\\m\\idle_anim\\f{i}.png')
                    for i in range(4)]},
-         'f': {'hit_anim': load_image('heroes\\elf\\f\\hit_anim\\f0.png'),
-               'run_anim': [
+         'f': {'run_anim': [
                    load_image(f'heroes\\elf\\f\\run_anim\\f{i}.png')
                    for i in range(4)],
                'idle_anim': [
                    load_image(f'heroes\\elf\\f\\idle_anim\\f{i}.png')
                    for i in range(4)]}},
     'knight':
-        {'m': {'hit_anim': load_image('heroes\\knight\\m\\hit_anim\\f0.png'),
-               'run_anim': [
+        {'m': {'run_anim': [
                    load_image(f'heroes\\knight\\m\\run_anim\\f{i}.png')
                    for i in range(4)],
                'idle_anim': [
                    load_image(f'heroes\\knight\\m\\idle_anim\\f{i}.png')
                    for i in range(4)]},
-         'f': {'hit_anim': load_image('heroes\\knight\\f\\hit_anim\\f0.png'),
-               'run_anim': [
+         'f': {'run_anim': [
                    load_image(f'heroes\\knight\\f\\run_anim\\f{i}.png')
                    for i in range(4)],
                'idle_anim': [
                    load_image(f'heroes\\knight\\f\\idle_anim\\f{i}.png')
                    for i in range(4)]}},
     'lizard':
-        {'m': {'hit_anim': load_image('heroes\\lizard\\m\\hit_anim\\f0.png'),
-               'run_anim': [
+        {'m': {'run_anim': [
                    load_image(f'heroes\\lizard\\m\\run_anim\\f{i}.png')
                    for i in range(4)],
                'idle_anim': [
                    load_image(f'heroes\\lizard\\m\\idle_anim\\f{i}.png')
                    for i in range(4)]},
-         'f': {'hit_anim': load_image('heroes\\knight\\f\\hit_anim\\f0.png'),
-               'run_anim': [
+         'f': {'run_anim': [
                    load_image(f'heroes\\lizard\\f\\run_anim\\f{i}.png')
                    for i in range(4)],
                'idle_anim': [
                    load_image(f'heroes\\lizard\\f\\idle_anim\\f{i}.png')
                    for i in range(4)]}},
     'wizzard':
-        {'m': {'hit_anim': load_image('heroes\\wizzard\\m\\hit_anim\\f0.png'),
-               'run_anim': [
+        {'m': {'run_anim': [
                    load_image(f'heroes\\wizzard\\m\\run_anim\\f{i}.png')
                    for i in range(4)],
                'idle_anim': [
                    load_image(f'heroes\\wizzard\\m\\idle_anim\\f{i}.png')
                    for i in range(4)]},
-         'f': {'hit_anim': load_image('heroes\\wizzard\\f\\hit_anim\\f0.png'),
-               'run_anim': [load_image(f'heroes\\wizzard\\f\\run_anim\\f{i}.png')
+         'f': {'run_anim': [load_image(f'heroes\\wizzard\\f\\run_anim\\f{i}.png')
                             for i in range(4)],
                'idle_anim': [
                    load_image(f'heroes\\wizzard\\f\\idle_anim\\f{i}.png')

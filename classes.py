@@ -126,6 +126,7 @@ class Enemy(Entity):
         super(Enemy, self).update(*args)
         if self.hp <= 0:
             self.kill()
+            # Particle(self.rect.midtop, self.rect)
         self.move_to_player(args[1])
         self.attack_player(args[1])
         if self.attack_cooldown > 0:
@@ -152,3 +153,26 @@ class Camera:
     def update(self, target):
         self.dx = -(target.rect.x + target.rect.w // 2 - WIDTH // 2)
         self.dy = -(target.rect.y + target.rect.h // 2 - HEIGHT // 2)
+
+
+# class Particle(pygame.sprite.Sprite):
+#     def __init__(self, pos, entity_rect):
+#         super().__init__(ALL_SPRITES)
+#         self.image = SKULL_IMAGE
+#         self.rect = self.image.get_rect()
+#
+#         self.velocity = [0, 0]
+#         self.rect.x, self.rect.y = pos
+#
+#         self.entity_rect = entity_rect
+#
+#         self.gravity = GRAVITY
+#
+#     def update(self, *args):
+#         self.velocity[1] += self.gravity
+#
+#         self.rect.x += self.velocity[0]
+#         self.rect.y += self.velocity[1]
+#
+#         if not self.rect.colliderect(self.entity_rect):
+#             self.kill()

@@ -72,7 +72,12 @@ RUN = 1
 # HIT = 2
 DMGD = 3
 
+
+GRAVITY = 5
+
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
+
+SCREEN_RECT = (0, 0, WIDTH, HEIGHT)
 
 ALL_SPRITES = pygame.sprite.LayeredUpdates()
 ENEMIES_SPRITES = pygame.sprite.Group()
@@ -81,6 +86,8 @@ HERO_SPRITES = pygame.sprite.Group()
 
 CLOCK = pygame.time.Clock()
 FPS = 10
+
+SKULL_IMAGE = load_image('ui\\skull.png')
 # ---------------
 
 

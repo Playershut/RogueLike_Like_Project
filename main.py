@@ -1,8 +1,5 @@
-import pygame
-
 from classes import *
 from settings import *
-from random import randint
 
 
 def generate_level(level):

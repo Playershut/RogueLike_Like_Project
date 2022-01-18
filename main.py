@@ -24,12 +24,13 @@ start_screen()
 level_map = load_level('maps\\lvl_1.txt')
 player, max_w, max_h = generate_level(load_level('maps\\lvl_1.txt'))
 
-enemy = Enemy('undeads', 'big_zombie', ALL_SPRITES, ENEMIES_SPRITES)
+enemy = Enemy('undeads', 'zombie', ALL_SPRITES, ENEMIES_SPRITES)
 enemy.rect.midbottom = (736, 544)
 enemy.right_faced = False
 enemies_list = [enemy]
 
 HERO = Hero('elf', 'm', ALL_SPRITES, HERO_SPRITES)
+HERO.rect.center = (0, 0)
 camera = Camera()
 
 running = True
@@ -58,7 +59,7 @@ while running:
         HERO.attack(enemies_list)
     if not ((key[pygame.K_UP] or key[pygame.K_w]) or (key[pygame.K_DOWN] or key[pygame.K_s]) or
             (key[pygame.K_LEFT] or key[pygame.K_a]) or (key[pygame.K_RIGHT] or key[pygame.K_d]) or
-            ((key[pygame.K_SPACE] or pygame.mouse.get_pressed()[0]) and HERO.attack_cooldown == 0)):
+            ((key[pygame.K_SPACE] or pygame.mouse.get_pressed()[0]) and HERO.attack_is_ready)):
         HERO.anim_type = IDLE
     if key[pygame.K_ESCAPE]:
         running = False
@@ -67,6 +68,8 @@ while running:
 
     ALL_SPRITES.draw(SCREEN)
     ALL_SPRITES.update(ENEMIES_SPRITES, HERO, enemies_list)
+    UI_SPRITES.draw(SCREEN)
+    UI_SPRITES.update()
 
     camera.update(HERO)
 

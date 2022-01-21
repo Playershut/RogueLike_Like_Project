@@ -37,30 +37,6 @@ def load_level(filename):
 
     return list(map(lambda x: x.ljust(max_width, '.'), level_map))
 
-
-def start_screen():
-    background = pygame.transform.scale(load_image('startscreen_background_image.png'), (WIDTH, HEIGHT))
-    SCREEN.blit(background, (0, 0))
-    font = pygame.font.Font(None, 30)
-    text_start_game = 'Начать игру'
-    start_game = font.render(text_start_game, True, pygame.Color('white'))
-    rect_start_game = start_game.get_rect()
-    rect_start_game.center = SCREEN.get_rect().center
-    SCREEN.blit(start_game, rect_start_game)
-
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    if rect_start_game.collidepoint(event.pos):
-                        return
-        pygame.display.flip()
-        CLOCK.tick(FPS)
-
-
 # ---------------
 
 # constants

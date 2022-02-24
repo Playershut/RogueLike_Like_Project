@@ -1,14 +1,8 @@
 from classes import *
 from settings import *
-from random import randint
 
 pygame.display.set_caption('Roguelike Like')
 pygame.font.init()
-
-all_sprites = pygame.sprite.Group()
-enemies_sprites = pygame.sprite.Group()
-walls_sprites = pygame.sprite.Group()
-hero_sprites = pygame.sprite.Group()
 
 choice_hero_id = 0  # 0 - герой не выбран, 1 - эльф, 2 - рыцарь, 3 - ящер, 4 - волшебник
 
@@ -18,11 +12,11 @@ def generate_level(level):
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '.':
-                Tile('empty', x, y, all_sprites)
+                Tile('empty', x, y, ALL_SPRITES)
             elif level[y][x] == '#':
-                Tile('wall', x, y, all_sprites, walls_sprites)
+                Tile('wall', x, y, ALL_SPRITES, WALLS_SPRITES)
             elif level[y][x] == '@':
-                Tile('empty', x, y, all_sprites)
+                Tile('empty', x, y, ALL_SPRITES)
                 # new_player = Player(x, y)
     return new_player, x, y
 
@@ -85,18 +79,18 @@ level_map = load_level('maps\\lvl_1.txt')
 player, max_w, max_h = generate_level(load_level('maps\\lvl_1.txt'))
 
 
-enemy = Enemy('undeads', 'big_zombie', all_sprites, enemies_sprites)
+enemy = Enemy('undeads', 'big_zombie', ALL_SPRITES, ENEMIES_SPRITES)
 enemy.rect.midbottom = (736, 544)
 enemy.right_faced = False
 
 if choice_hero_id == 1:
-    HERO = Hero('elf', 'm', all_sprites, hero_sprites)
+    HERO = Hero('elf', 'm', ALL_SPRITES, HERO_SPRITES)
 elif choice_hero_id == 2:
-    HERO = Hero('knight', 'm', all_sprites, hero_sprites)
+    HERO = Hero('knight', 'm', ALL_SPRITES, HERO_SPRITES)
 elif choice_hero_id == 3:
-    HERO = Hero('lizard', 'm', all_sprites, hero_sprites)
+    HERO = Hero('lizard', 'm', ALL_SPRITES, HERO_SPRITES)
 elif choice_hero_id == 4:
-    HERO = Hero('wizzard', 'm', all_sprites, hero_sprites)
+    HERO = Hero('wizzard', 'm', ALL_SPRITES, HERO_SPRITES)
 
 running = True
 
@@ -128,8 +122,8 @@ while running:
 
     SCREEN.fill((0, 0, 0))
 
-    all_sprites.draw(SCREEN)
-    all_sprites.update(enemies_sprites, HERO)
+    ALL_SPRITES.draw(SCREEN)
+    ALL_SPRITES.update(ENEMIES_SPRITES, HERO)
 
     pygame.display.flip()
     CLOCK.tick(FPS)

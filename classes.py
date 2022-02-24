@@ -1,5 +1,4 @@
 import pygame.transform
-import timer
 
 from settings import *
 

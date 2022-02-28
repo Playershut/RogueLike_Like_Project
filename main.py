@@ -94,6 +94,8 @@ elif choice_hero_id == 4:
 
 running = True
 
+CAMERA = Camera()
+
 frame_counter = 1
 
 while running:
@@ -124,6 +126,9 @@ while running:
 
     ALL_SPRITES.draw(SCREEN)
     ALL_SPRITES.update(ENEMIES_SPRITES, HERO)
+
+    UI_SPRITES.draw(SCREEN)
+    CAMERA.update(HERO)
 
     pygame.display.flip()
     CLOCK.tick(FPS)
